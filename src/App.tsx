@@ -10,6 +10,7 @@ import TestimonialCarousel from './components/Testimonial'
 import ContactFormWithTicker from './components/Contact'
 import ResumeTimeline from './components/Timeline'
 import ServiceCard from './components/Card'
+import BlogPostSection from './components/Blog'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -23,6 +24,7 @@ function App() {
     <ProjectCarousel/>
     <TestimonialCarousel/>
     <ContactFormWithTicker/>
+    <BlogPostSection/>
     <Footer/>
   </div>
   )
