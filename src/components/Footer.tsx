@@ -6,7 +6,7 @@ import InstagramIcon from '../assets/footer/instagram.svg';
 import LinkedinIcon from '../assets/footer/linkedinwhite.svg';
 import YoutubeIcon from '../assets/footer/youtubewhite.svg';
 
-export default function Footer() {
+export default function mkFooter() {
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e) => {

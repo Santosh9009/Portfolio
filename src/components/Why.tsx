@@ -6,17 +6,17 @@ export default function WhyHireMeSection() {
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
         {/* Left side with image */}
         <div className="w-full lg:w-2/5 relative">
-          <div className="rounded-3xl h-[35vh] bg-gradient-to-b from-[#AB69B3] to-[#C7619C] p-4 max-w-xs mx-auto relative">
+          <div className="rounded-3xl h-[35vh] md:h-[45vh] bg-gradient-to-b from-[#AB69B3] to-[#C7619C] p-4 max-w-xs mx-auto relative">
             <div className="absolute bottom-12 inset-0 flex items-center justify-center">
               <img 
                 src={img} 
                 alt="Professional portrait" 
-                className="rounded-2xl w-full  h-[40vh] object-contain" 
+                className="rounded-2xl w-full h-[40vh] md:h-[50vh] object-contain" 
               />
             </div>
           </div>
         </div>
-        
+          
         {/* Right side with content */}
         <div className="w-full lg:w-3/5">
           {/* Heading */}
@@ -67,7 +67,7 @@ export default function WhyHireMeSection() {
           
           {/* Resume button */}
           <div>
-            <button className="border-2 border-gray-800 text-gray-800 font-medium rounded-full px-12 py-3 hover:bg-gray-800 hover:text-white transition-colors">
+            <button className="border-2 border-gray-800 text-gray-800 font-medium rounded-full px-20 py-10 hover:bg-gray-800 hover:text-white transition-colors text-3xl">
               Resume
             </button>
           </div>

@@ -29,11 +29,11 @@ export default function BlogPostSection() {
   ];
 
   return (
-    <div className="min-h-screen w-full py-16 px-6">
+    <div className="min-h-screen w-full py-8 sm:py-12 md:py-16 px-4 sm:px-6">
       <div className="max-w-[1400px] mx-auto">
-        <div className="flex justify-between items-center mb-12">
-          <h2 className="text-[48px] font-bold text-[#2D2D2D]">From my blog post</h2>
-          <button className="px-10 py-4 bg-gradient-to-r from-[#AB69B3] to-[#C7619C] text-white rounded-full hover:opacity-90 transition-opacity text-xl font-medium">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-[48px] font-bold text-[#2D2D2D] text-center sm:text-left">From my blog post</h2>
+          <button className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-gradient-to-r from-[#AB69B3] to-[#C7619C] text-white rounded-full hover:opacity-90 transition-opacity text-base sm:text-lg md:text-xl font-medium whitespace-nowrap">
             See All
           </button>
         </div>
