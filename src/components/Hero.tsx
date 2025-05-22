@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import profilePic from "../assets/Hetansa_Pic.svg";
 import award1 from "../assets/Award1.svg";
@@ -6,19 +6,40 @@ import award2 from "../assets/Award2.svg";
 import award3 from "../assets/Award3.svg";
 import HRLogo from "../assets/HRLogo.svg";
 import backgroundPic from "../assets/BackgroundPic.jpg";
-import whatsappIcon from "../assets/whatsapp.svg";
 import youtubeIcon from "../assets/youtube.svg";
 import linkedinIcon from "../assets/linkedin.svg";
 import instagramIcon from "../assets/instagram.svg";
 import MobileMenu from "./MobileMenu";
+import { navigationItems } from '../constants/navigation';
+
+const SOCIAL_LINKS = [
+  { icon: youtubeIcon, name: "YouTube", url: "https://youtube.com/@hetansarajkotia?si=N3nhr4g7MaxyqQaS" },
+  { icon: linkedinIcon, name: "LinkedIn", url: "https://www.linkedin.com/in/hetansa/" },
+  { icon: instagramIcon, name: "Instagram", url: "https://www.instagram.com/hetansa_raj?igsh=dmpzMXI0MDg4eWE3" },
+];
+
+const AWARDS = [
+  { src: award1, alt: "The Women's Bioscope Award", title: "Best Documentary Film" },
+  { src: award2, alt: "Ahmedabad International Film Festival", title: "Official Selection" },
+  { src: award3, alt: "Jagran Film Festival", title: "Best Short Film" },
+];
 
 export default function HeroSection() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
+
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.getElementById(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
+    }
+  }, []);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-white relative overflow-hidden mt-24 md:mt-0">
+    <section aria-label="Hero Section" className="flex flex-col lg:flex-row min-h-screen bg-white relative overflow-hidden mt-24 md:mt-0">
       {/* Sidebar */}
       <div className="w-full lg:w-80 bg-white p-4 sm:p-6 flex flex-col items-center lg:items-center lg:py-24 relative z-50 pt-6 sm:pt-8">
         {/* Logo - visible only on desktop */}
@@ -26,11 +47,12 @@ export default function HeroSection() {
           <img 
             src={HRLogo} 
             alt="HR Logo" 
+            width={96}
+            height={96}
             className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 object-contain"
           />
         </div>
 
-        {/* Mobile Menu */}
         <MobileMenu 
           isOpen={isMenuOpen} 
           onClose={() => setIsMenuOpen(false)}
@@ -38,22 +60,18 @@ export default function HeroSection() {
         />
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex flex-col items-center space-y-8">
-          <a href="#home" className="text-pink-500 hover:text-pink-600 transition-colors text-2xl font-bold">
-            Home
-          </a>
-          <a href="#about" className="text-gray-700 hover:text-pink-500 transition-colors text-2xl font-bold">
-            About Me
-          </a>
-          <a href="#portfolio" className="text-gray-700 hover:text-pink-500 transition-colors text-2xl font-bold">
-            Portfolio
-          </a>
-          <a href="#testimonials" className="text-gray-700 hover:text-pink-500 transition-colors text-2xl font-bold">
-            Testimonials
-          </a>
-          <a href="#blog" className="text-gray-700 hover:text-pink-500 transition-colors text-2xl font-bold">
-            Blog
-          </a>
+        <nav className="hidden lg:flex flex-col items-center space-y-8" aria-label="Main navigation">
+          {navigationItems.map((item) => (
+            <a 
+              key={item.href}
+              href={`#${item.href}`}
+              onClick={(e) => handleNavClick(e, item.href)}
+              className={`${item.isActive ? 'text-pink-500' : 'text-gray-700'} hover:text-pink-500 transition-colors text-2xl font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded-md px-3 py-1`}
+              aria-current={item.isActive ? 'page' : undefined}
+            >
+              {item.text}
+            </a>
+          ))}
         </nav>
       </div>
 
@@ -68,20 +86,19 @@ export default function HeroSection() {
           <img 
             src={profilePic}
             alt="Hetansa Rajkotia" 
+            width={224}
+            height={224}
             className="w-full h-full object-contain"
+            loading="eager"
           />
         </motion.div>
 
         {/* Main Content with Purple Background */}
         <div className="bg-[linear-gradient(145deg,#673AB7_10%,#252124_50%)] relative overflow-hidden rounded-b-[1.5rem] sm:rounded-b-[2rem] md:rounded-b-[3rem] mt-24 sm:mt-28 md:mt-0">
-          {/* Background Image */}
           <div 
-            className="absolute inset-0 z-0 opacity-30" 
-            style={{
-              backgroundImage: `url(${backgroundPic})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
+            className="absolute inset-0 z-0 opacity-30 bg-cover bg-center" 
+            style={{ backgroundImage: `url(${backgroundPic})` }}
+            aria-hidden="true"
           />
 
           <div className="px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 text-white z-10 relative min-h-[400px] sm:min-h-[450px] md:min-h-[600px] flex flex-col justify-center">
@@ -95,41 +112,44 @@ export default function HeroSection() {
               </p>
 
               {/* Social Icons */}
-              <div className="flex items-center justify-center md:justify-start space-x-4 sm:space-x-6 md:space-x-8">
-                <a href="#" className="text-white hover:text-pink-400 transition-all duration-300 transform hover:scale-110">
-                  <img src={whatsappIcon} alt="WhatsApp" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
-                </a>
-                <a href="#" className="text-white hover:text-pink-400 transition-all duration-300 transform hover:scale-110">
-                  <img src={youtubeIcon} alt="YouTube" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
-                </a>
-                <a href="#" className="text-white hover:text-pink-400 transition-all duration-300 transform hover:scale-110">
-                  <img src={linkedinIcon} alt="LinkedIn" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
-                </a>
-                <a href="#" className="text-white hover:text-pink-400 transition-all duration-300 transform hover:scale-110">
-                  <img src={instagramIcon} alt="Instagram" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
-                </a>
+              <div className="flex items-center justify-center md:justify-start space-x-4 sm:space-x-6 md:space-x-8" role="list" aria-label="Social media links">
+                {SOCIAL_LINKS.map(({ icon, name, url }) => (
+                  <a 
+                    key={name}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={name}
+                    className="text-white hover:text-pink-400 transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 rounded-full p-1"
+                  >
+                    <img src={icon} alt="" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" aria-hidden="true" />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
         {/* Awards Section */}
-        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-8 sm:gap-12 py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8 bg-white">
-          <img 
-            src={award1}
-            alt="The Women's Bioscope Award" 
-            className="w-32 sm:w-40 md:w-auto md:h-32 lg:h-40 object-contain transform hover:scale-105 transition-all duration-300"
-          />
-          <img 
-            src={award2}
-            alt="Ahmedabad International Film Festival" 
-            className="w-32 sm:w-40 md:w-auto md:h-32 lg:h-40 object-contain transform hover:scale-105 transition-all duration-300"
-          />
-          <img 
-            src={award3}
-            alt="Jagran Film Festival" 
-            className="w-32 sm:w-40 md:w-auto md:h-32 lg:h-40 object-contain transform hover:scale-105 transition-all duration-300"
-          />
+        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-8 sm:gap-12 py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8 bg-white" role="list" aria-label="Awards and Recognition">
+          {AWARDS.map(({ src, alt, title }) => (
+            <div 
+              key={alt}
+              className="group relative"
+              role="listitem"
+            >
+              <img 
+                src={src}
+                alt={alt} 
+                width={160}
+                height={160}
+                className="w-32 sm:w-40 md:w-auto md:h-32 lg:h-40 object-contain transform group-hover:scale-105 transition-all duration-300"
+              />
+              <div className="opacity-0 group-hover:opacity-100 absolute -bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm px-3 py-1 rounded-md transition-opacity duration-200 whitespace-nowrap">
+                {title}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -142,12 +162,14 @@ export default function HeroSection() {
       >
         <img 
           src={profilePic}
-          alt="Hetansa Rajkotia" 
+          alt=""
+          width={304}
+          height={304}
           className="w-full h-full object-contain"
+          aria-hidden="true"
         />
-        {/* Connecting Line */}
-        <div className="hidden lg:block absolute left-1/2 bottom-0 w-[2px] h-24 md:h-32 lg:h-36 bg-black transform translate-y-full"></div>
+        <div className="hidden lg:block absolute left-1/2 bottom-0 w-[2px] h-24 md:h-32 lg:h-36 bg-black transform translate-y-full" aria-hidden="true"></div>
       </motion.div>
-    </div>
+    </section>
   );
 }

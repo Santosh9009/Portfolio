@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
 import backgroundImage from "../assets/service/servicebg.jpg";
@@ -7,6 +7,7 @@ import quotedown from "../assets/quote-down.svg";
 export default function TestimonialCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef(null);
+  const [dragConstraints, setDragConstraints] = useState({ right: 0, left: 0 });
 
   const testimonials = [
     {
@@ -35,6 +36,13 @@ export default function TestimonialCarousel() {
       profilePic: "https://i.pravatar.cc/100?img=3",
     },
   ];
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      const { scrollWidth, offsetWidth } = carouselRef.current;
+      setDragConstraints({ right: 0, left: -(scrollWidth - offsetWidth) });
+    }
+  }, []);
 
   const renderStars = (rating: number) => {
     return Array(rating)
@@ -76,13 +84,13 @@ export default function TestimonialCarousel() {
           <motion.div ref={carouselRef} className="cursor-grab overflow-hidden">
             <motion.div
               drag="x"
-              dragConstraints={{ right: 0, left: -1000 }} // adjust based on content width
+              dragConstraints={dragConstraints}
               className="flex gap-6"
             >
               {testimonials.map((testimonial, index) => (
                 <article
                   key={index}
-                  className="min-w-[80%] md:min-w-[45%] bg-white/10 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 hover:border hover:border-[#979797]"
+                  className="min-w-[80%] md:min-w-[45%] bg-white/10 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 border-1 border-black hover:border-[#979797]"
                 >
                   {/* Header: Profile + Rating + Quote Icon */}
                   <header className="flex justify-between items-start ">

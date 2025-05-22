@@ -1,19 +1,39 @@
 import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { ArrowUpRight, Send } from 'lucide-react';
 import Hrlogo from '../assets/footer/RLogoDark.svg';
-import WhatsappIcon from '../assets/footer/whatsapp.svg';
 import InstagramIcon from '../assets/footer/instagram.svg';
 import LinkedinIcon from '../assets/footer/linkedinwhite.svg';
 import YoutubeIcon from '../assets/footer/youtubewhite.svg';
+import Resume from '../assets/Hetansa_Resume.pdf';
 
-export default function mkFooter() {
+const navigationItems = [
+  { href: 'home', text: 'Home' },
+  { href: 'about', text: 'About Me' },
+  { href: 'portfolio', text: 'Portfolio' },
+  { href: 'testimonials', text: 'Testimonials' },
+  { href: 'blog', text: 'Blogs' }
+];
+
+const SOCIAL_LINKS = [
+   { icon: YoutubeIcon, name: "YouTube", url: "https://youtube.com/@hetansarajkotia?si=N3nhr4g7MaxyqQaS" },
+   { icon: LinkedinIcon, name: "LinkedIn", url: "https://www.linkedin.com/in/hetansa/" },
+   { icon: InstagramIcon, name: "Instagram", url: "https://www.instagram.com/hetansa_raj?igsh=dmpzMXI0MDg4eWE3" },
+];
+
+export default function Footer() {
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle email submission
     console.log('Email submitted:', email);
     setEmail('');
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    document.getElementById(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -22,9 +42,13 @@ export default function mkFooter() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 md:mb-0">Lets Connect</h2>
-          <button className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] hover:from-[#C7619C] hover:to-[#AB69B3] text-white px-8 py-3 rounded-full flex items-center gap-2 text-lg font-semibold shadow-lg">
+          <a 
+            href={Resume}
+            download="Hetansa_Resume.pdf"
+            className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] hover:from-[#C7619C] hover:to-[#AB69B3] text-white px-8 py-3 rounded-full flex items-center gap-2 text-lg font-semibold shadow-lg"
+          >
             Resume <ArrowUpRight size={22} />
-          </button>
+          </a>
         </div>
 
         {/* Main Footer Grid */}
@@ -41,18 +65,17 @@ export default function mkFooter() {
             </p>
             {/* Social Icons */}
             <div className="flex gap-6">
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <img src={WhatsappIcon} alt="WhatsApp" className="w-8 h-8 object-contain" />
-              </a>
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <img src={InstagramIcon} alt="Instagram" className="w-8 h-8 object-contain" />
-              </a>
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <img src={LinkedinIcon} alt="LinkedIn" className="w-8 h-8 object-contain" />
-              </a>
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <img src={YoutubeIcon} alt="YouTube" className="w-8 h-8 object-contain" />
-              </a>
+              {SOCIAL_LINKS.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.url}
+                  className="hover:opacity-80 transition-opacity"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src={link.icon} alt={link.name} className="w-8 h-8 object-contain" />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -62,18 +85,23 @@ export default function mkFooter() {
             <div className="space-y-6">
               <h3 className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent text-xl font-medium mb-6">Discover</h3>
               <nav className="flex flex-col gap-4">
-                <a href="#" className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent">Home</a>
-                <a href="#" className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent">About Me</a>
-                <a href="#" className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent">Portfolio</a>
-                <a href="#" className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent">Testimonials</a>
-                <a href="#" className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent">Blogs</a>
+                {navigationItems.map((item) => (
+                  <a 
+                    key={item.href}
+                    href={`#${item.href}`}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className="text-white hover:opacity-80 transition-opacity cursor-pointer"
+                  >
+                    {item.text}
+                  </a>
+                ))}
               </nav>
             </div>
             {/* Contact */}
             <div className="space-y-6">
               <h3 className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent text-xl font-medium mb-6">Contact</h3>
               <div className="mb-6">
-                <a href="#" className="bg-gradient-to-r from-[#AB69B3] to-[#C7619C] bg-clip-text text-transparent">Portfolio-htn.com</a>
+                <a href="#" className="text-white hover:opacity-80 transition-opacity">Portfolio-htn.com</a>
               </div>
             </div>
             {/* Lets talk! */}
